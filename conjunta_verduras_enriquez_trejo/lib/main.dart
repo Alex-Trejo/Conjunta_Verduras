@@ -1,20 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
+import 'controller/verdura_controller.dart';
+import 'view/verdura_view.dart';
 
-void main() {
-  runApp(const MainApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized(); // Necesario para inicializar plugins
+  final verduraController = VerduraController();
+  await verduraController.loadFromFile(); // Cargar datos desde el archivo
+
+  runApp(
+    ChangeNotifierProvider(
+      create: (_) => verduraController,
+      child: MyApp(),
+    ),
+  );
 }
 
-class MainApp extends StatelessWidget {
-  const MainApp({super.key});
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      home: VerduraView(),
     );
   }
 }
